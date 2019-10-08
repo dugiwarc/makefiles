@@ -1,17 +1,23 @@
-EXEC = main_calcul main1 doc dist
+EXEC = main doc dist main.o jeu.o grille.o io.o clean
 CFLAGS = -Wall -g -std=c99
+TARGETS = main.o jeu.o grille.o io.o
 
 all : $(EXEC) 
 
-main_calcul : calcul.c main_calcul.c
-	gcc $(CFLAGS) -c calcul.c
-	gcc $(CFLAGS) -c main_calcul.c	
-	gcc $(CFLAGS) -o main_calcul main_calcul.o calcul.o
+main: $(TARGETS)
+	gcc -o main $(TARGETS)
 
-main1 : main1.c fich1.c
-	gcc $(CFLAGS) -c main1.c
-	gcc $(CFLAGS) -c fich1.c	
-	gcc $(CFLAGS) -o main1 main1.o fich1.o
+main.o:	main.c jeu.h io.h grille.h
+	gcc -c main.c
+
+jeu.o: jeu.c jeu.h
+	gcc -c jeu.c
+
+grille.o: grille.c grille.h
+	gcc -c grille.c
+
+io.o: io.c io.h
+	gcc -c io.c
 
 doc:
 	doxygen -g
@@ -19,4 +25,7 @@ doc:
 	rm -rf ./latex
 
 dist :
-	tar cfJ	archive.tar.xz *
+	tar cfJ	archive.tar.xz *.c Makefile ./html
+
+clean: 
+	rm *.o 
