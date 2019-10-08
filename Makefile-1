@@ -1,0 +1,22 @@
+EXEC = main_calcul main1 doc dist
+CFLAGS = -Wall -g -std=c99
+
+all : $(EXEC) 
+
+main_calcul : calcul.c main_calcul.c
+	gcc $(CFLAGS) -c calcul.c
+	gcc $(CFLAGS) -c main_calcul.c	
+	gcc $(CFLAGS) -o main_calcul main_calcul.o calcul.o
+
+main1 : main1.c fich1.c
+	gcc $(CFLAGS) -c main1.c
+	gcc $(CFLAGS) -c fich1.c	
+	gcc $(CFLAGS) -o main1 main1.o fich1.o
+
+doc:
+	doxygen -g
+	doxygen Doxyfile 
+	rm -rf ./latex
+
+dist :
+	tar cfJ	archive.tar.xz *
